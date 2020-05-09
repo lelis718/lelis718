@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handyclientapp/main_bloc.dart';
 import 'package:handyclientapp/models/models.dart';
+import 'package:handyclientapp/modules/handy_theme/handy_theme.dart';
 import 'package:handyclientapp/pages/intro/intro.dart';
 import 'package:handyclientapp/pages/pages.dart';
 import 'package:handyclientapp/pages/shared/shared.dart';
@@ -13,6 +14,9 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .bloc<HandyThemeBloc>()
+        .add(HandyThemeUpdateTitle(title: "Welcome to Handy!"));
     return BlocBuilder<IntroBloc, IntroState>(builder: (context, state) {
       if (state is Initialize) {
         context.bloc<IntroBloc>().add(LoadCards());

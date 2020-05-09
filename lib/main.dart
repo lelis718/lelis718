@@ -30,8 +30,7 @@ class HandyClient extends StatelessWidget {
           create: (context) => MainBloc(),
         ),
         BlocProvider<HandyThemeBloc>(
-          create: (context) => HandyThemeBloc()
-            ..add(HandyThemeUpdateTitle(title: "Welcome to Handy!")),
+          create: (context) => HandyThemeBloc(),
         ),
         BlocProvider<HomeBloc>(
           create: (context) => HomeBloc(
