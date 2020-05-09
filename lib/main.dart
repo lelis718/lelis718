@@ -25,32 +25,44 @@ class HandyClient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider<MainBloc>(create: (context) => MainBloc()),
-          BlocProvider<HandyThemeBloc>(create: (context) => HandyThemeBloc()),
-          BlocProvider<HomeBloc>(
-              create: (context) =>
-                  HomeBloc(deviceInfoService: locator<DeviceInfoService>())),
-          BlocProvider<IntroBloc>(
-              create: (context) =>
-                  IntroBloc(introService: locator<IntroService>())),
-        ],
-        child: BlocListener<MainBloc, MainState>(
-          listener: (context, state) {
-            if (state is NavigationChanged) {
-              print("Changing route to ${state.route}");
-              _navigatorKey.currentState.pushNamed(state.route);
-            } else if (state is NavigationPop &&
-                _navigatorKey.currentState.canPop()) {
+      providers: [
+        BlocProvider<MainBloc>(
+          create: (context) => MainBloc(),
+        ),
+        BlocProvider<HandyThemeBloc>(
+          create: (context) => HandyThemeBloc()
+            ..add(HandyThemeUpdateTitle(title: "Welcome to Handy!")),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(
+            deviceInfoService: locator<DeviceInfoService>(),
+          ),
+        ),
+        BlocProvider<IntroBloc>(
+          create: (context) => IntroBloc(
+            introService: locator<IntroService>(),
+          ),
+        ),
+      ],
+      child: BlocListener<MainBloc, MainState>(
+        listener: (context, state) {
+          if (state is NavigationChanged) {
+            _navigatorKey.currentState.pushNamed(state.route);
+          } else if (state is NavigationPop) {
+            if (_navigatorKey.currentState.canPop()) {
               _navigatorKey.currentState.pop();
             }
-          },
-          child: MaterialApp(
-              home: HandyThemeWidget(
-                  navigatorKey: _navigatorKey,
-                  initialRoute: PageRoutes.home,
-                  routes: routes)),
-        ));
+          }
+        },
+        child: MaterialApp(
+          home: HandyThemeWidget(
+            navigatorKey: _navigatorKey,
+            initialRoute: PageRoutes.home,
+            routes: routes,
+          ),
+        ),
+      ),
+    );
   }
 }
 
