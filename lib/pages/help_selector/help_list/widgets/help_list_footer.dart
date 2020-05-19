@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:handyclientapp/pages/shared/shared.dart';
 
 class HelpListFooter extends StatelessWidget {
   final VoidCallback onNextHelp;
@@ -10,24 +9,24 @@ class HelpListFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          ActionFooterButton(
-            iconButton: FontAwesomeIcons.stickyNote,
-            textButton: "Swipe Left for next card",
-            onTap: () => this.onNextHelp(),
+    return BottomNavigationBar(
+      currentIndex: 0,
+      items: [
+        BottomNavigationBarItem(
+          icon: IconButton(
+            icon: Icon(FontAwesomeIcons.stickyNote),
+            onPressed: () => this.onNextHelp(),
           ),
-          ActionFooterButton(
-            iconButton: FontAwesomeIcons.comments,
-            textButton: "Swipe Right to give a hand",
-            onTap: () => this.onHelp(),
+          title: Text('Swipe Left for next card'),
+        ),
+        BottomNavigationBarItem(
+          icon: IconButton(
+            icon: Icon(FontAwesomeIcons.comments),
+            onPressed: () => this.onHelp(),
           ),
-        ],
-      ),
+          title: Text('Swipe Right to give a hand'),
+        ),
+      ],
     );
   }
 }

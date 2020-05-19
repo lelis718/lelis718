@@ -39,12 +39,6 @@ class HandyClient extends StatelessWidget {
         BlocProvider<HandyThemeBloc>(
           create: (context) => HandyThemeBloc(),
         ),
-        // BlocProvider<HelpListBloc>(
-        //   create: (context) => HelpListBloc(
-        //     deviceInfoService: locator<DeviceInfoService>(),
-        //     helpService: locator<HelpService>(),
-        //   ),
-        // ),
         // BlocProvider<MyRequestsBloc>(
         //   create: (context) => MyRequestsBloc(
         //     deviceInfoService: locator<DeviceInfoService>(),

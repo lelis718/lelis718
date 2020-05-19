@@ -18,24 +18,10 @@ class HandyThemeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HandyThemeBloc, HandyThemeState>(
-      builder: (context, state) {
-        String title = "Handy!";
-        if (state is HandyThemeTitleUpdatedState) {
-          title = state.title;
-        }
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-          ),
-          body: NavigationWidget(
-            navigatorKey: navigatorKey,
-            initialRoute: this.initialRoute,
-            routes: routes,
-          ),
-          bottomNavigationBar: Text("Aqui vai a barra de navegação"),
-        );
-      },
+    return NavigationWidget(
+      navigatorKey: navigatorKey,
+      initialRoute: this.initialRoute,
+      routes: routes,
     );
   }
 }

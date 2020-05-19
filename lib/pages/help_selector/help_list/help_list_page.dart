@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handyclientapp/handy_theme/handy_theme.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:handyclientapp/navigation/navigation.dart';
 import 'package:handyclientapp/pages/pages.dart';
 import 'package:handyclientapp/pages/shared/shared.dart';
@@ -26,10 +26,6 @@ class _HelpListPageState extends State<HelpListPage> {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .bloc<HandyThemeBloc>()
-        .add(HandyThemeUpdateTitleEvent(title: 'Swipe cards to give a hand'));
-
     return MultiBlocProvider(
       providers: [
         BlocProvider<HelpListBloc>(
@@ -39,45 +35,60 @@ class _HelpListPageState extends State<HelpListPage> {
           ),
         ),
       ],
-      child: BlocBuilder<HelpListBloc, HelpListState>(
-        builder: (context, state) {
-          if (state is HelpListInitializeState) {
-            context.bloc<HelpListBloc>().add(HelpListWantToHelpEvent());
-          }
-          if (state is HelpListWantToHelpState) {
-            helpRequests = state.helpRequests;
-            this.cards = new List();
-            helpRequests.forEach((item) {
-              cards.add(new HelpCard(item));
-            });
-
-            return Container(
-              color: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 600,
-                    height: 450,
-                    padding: EdgeInsets.symmetric(vertical: 0),
-                    color: Colors.white,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: _drawDraggableCards(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Swipe cards to give a hand'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              context.bloc<NavigationBloc>().add(
+                    NavigationGoToPageEvent(
+                      page: Routes.helpSelector,
                     ),
-                  ),
-                  HelpListFooter(
-                    onHelp: () {
-                      final help = this.helpRequests[0];
-                      _openCard(context, help);
-                    },
-                    onNextHelp: () => _switchCards(),
-                  ),
-                ],
-              ),
-            );
-          }
-          return Loading(textToDisplay: "Loading...");
-        },
+                  );
+            },
+          ),
+        ),
+        body: BlocBuilder<HelpListBloc, HelpListState>(
+          builder: (context, state) {
+            if (state is HelpListInitializeState) {
+              context.bloc<HelpListBloc>().add(HelpListWantToHelpEvent());
+            }
+            if (state is HelpListWantToHelpState) {
+              helpRequests = state.helpRequests;
+              this.cards = new List();
+              helpRequests.forEach((item) {
+                cards.add(new HelpCard(item));
+              });
+
+              return Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: 600,
+                      height: 450,
+                      padding: EdgeInsets.symmetric(vertical: 0),
+                      color: Colors.white,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: _drawDraggableCards(context),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Loading(textToDisplay: "Loading...");
+          },
+        ),
+        bottomNavigationBar: HelpListFooter(
+          onHelp: () {
+            final help = this.helpRequests[0];
+            _openCard(context, help);
+          },
+          onNextHelp: () => _switchCards(),
+        ),
       ),
     );
   }

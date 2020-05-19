@@ -12,40 +12,40 @@ class HelpSelectorPage extends StatelessWidget {
           create: (context) => HelpSelectorBloc(),
         ),
       ],
-      child: BlocBuilder<HelpSelectorBloc, HelpSelectorState>(
-        builder: (context, state) {
-          print("state changed $state");
-          if (state is HelpSelectorHandyLoggedInState) {
-            return HelpSelectorWidget(
-              onSwipeLeft: () {
-                context
-                    .bloc<NavigationBloc>()
-                    .add(NavigationGoToPageEvent(page: Routes.needHelp));
-              },
-              onSwipeRight: () {
-                context
-                    .bloc<NavigationBloc>()
-                    .add(NavigationGoToPageEvent(page: Routes.helpList));
-              },
-              onRequestHelpTap: () {
-                context
-                    .bloc<NavigationBloc>()
-                    .add(NavigationGoToPageEvent(page: Routes.needHelp));
-              },
-              onMyRequestsTap: () {
-                context
-                    .bloc<NavigationBloc>()
-                    .add(NavigationGoToPageEvent(page: Routes.myHelpRequests));
-              },
-              onHelpSomeoneTap: () {
-                context
-                    .bloc<NavigationBloc>()
-                    .add(NavigationGoToPageEvent(page: Routes.helpList));
-              },
-            );
-          }
-          return Container();
-        },
+      child: Scaffold(
+        body: BlocBuilder<HelpSelectorBloc, HelpSelectorState>(
+          builder: (context, state) {
+            if (state is HelpSelectorHandyLoggedInState) {
+              return HelpSelectorWidget(
+                onSwipeLeft: () {
+                  context
+                      .bloc<NavigationBloc>()
+                      .add(NavigationGoToPageEvent(page: Routes.needHelp));
+                },
+                onSwipeRight: () {
+                  context
+                      .bloc<NavigationBloc>()
+                      .add(NavigationGoToPageEvent(page: Routes.helpList));
+                },
+                onRequestHelpTap: () {
+                  context
+                      .bloc<NavigationBloc>()
+                      .add(NavigationGoToPageEvent(page: Routes.needHelp));
+                },
+                onMyRequestsTap: () {
+                  context.bloc<NavigationBloc>().add(
+                      NavigationGoToPageEvent(page: Routes.myHelpRequests));
+                },
+                onHelpSomeoneTap: () {
+                  context
+                      .bloc<NavigationBloc>()
+                      .add(NavigationGoToPageEvent(page: Routes.helpList));
+                },
+              );
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

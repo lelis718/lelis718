@@ -15,81 +15,87 @@ class NeedHelpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<HandyThemeBloc>(context)
-        .add(HandyThemeUpdateTitleEvent(title: 'What needs to be done?'));
-
-    return Container(
-      margin: EdgeInsets.all(20),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              key: Key('NeedHelpPage_RaisedButton_TextForm'),
-              maxLines: 10,
-              decoration: InputDecoration(
-                hintText: 'I need help to do ....',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.pink,
-                    style: BorderStyle.solid,
-                    width: 10,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('What needs to be done?'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: onReturning,
+        ),
+      ),
+      body: Container(
+        margin: EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                key: Key('NeedHelpPage_RaisedButton_TextForm'),
+                maxLines: 10,
+                decoration: InputDecoration(
+                  hintText: 'I need help to do ....',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.pink,
+                      style: BorderStyle.solid,
+                      width: 10,
+                    ),
                   ),
                 ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'We need to know what do you neeed';
+                  }
+                  onSubmit(Help(
+                    message: value,
+                    user: deviceInfo.uuid,
+                  ));
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'We need to know what do you neeed';
-                }
-                onSubmit(Help(
-                  message: value,
-                  user: deviceInfo.uuid,
-                ));
-                return null;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                children: <Widget>[
-                  RaisedButton(
-                    key: Key('NeedHelpPage_RaisedButton_Ask'),
-                    color: Colors.blue,
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Processing Data'),
-                          ),
-                        );
-                      }
-                    },
-                    child: Text(
-                      'Ask Help',
-                      style: TextStyle(
-                        color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(
+                  children: <Widget>[
+                    RaisedButton(
+                      key: Key('NeedHelpPage_RaisedButton_Ask'),
+                      color: Colors.blue,
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Processing Data'),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text(
+                        'Ask Help',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  RaisedButton(
-                    key: Key('NeedHelpPage_RaisedButton_Back'),
-                    color: Colors.blue,
-                    onPressed: onReturning,
-                    child: Text(
-                      'Back',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                    SizedBox(
+                      width: 20,
                     ),
-                  )
-                ],
+                    RaisedButton(
+                      key: Key('NeedHelpPage_RaisedButton_Back'),
+                      color: Colors.blue,
+                      onPressed: onReturning,
+                      child: Text(
+                        'Back',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

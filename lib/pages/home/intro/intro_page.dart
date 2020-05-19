@@ -25,15 +25,11 @@ class IntroPage extends StatelessWidget {
       ],
       child: BlocBuilder<IntroBloc, IntroState>(
         builder: (context, state) {
-          print("state changed $state");
-
           if (state is IntroInitializeState) {
-            print("Dispatching Event IntroCardsEvent");
             context.bloc<IntroBloc>().add(IntroLoadCardsEvent());
           }
 
           if (state is IntroCardsLoadedState) {
-            print("Loading cards (${state.cards.length})");
             return Container(
               color: Colors.white,
               child: Center(

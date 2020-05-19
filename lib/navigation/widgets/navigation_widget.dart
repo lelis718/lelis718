@@ -37,9 +37,10 @@ class NavigationWidget extends StatelessWidget {
         observers: [DebugNavObserver()],
         onGenerateRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (context) => routes[settings.name](context),
-              settings: settings,
-              maintainState: false);
+            builder: (context) => routes[settings.name](context),
+            settings: settings,
+            maintainState: false,
+          );
         },
       ),
     );
