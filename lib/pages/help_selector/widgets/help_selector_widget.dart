@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handyclientapp/handy_theme/handy_theme.dart';
+import 'package:handyclientapp/pages/help_selector/widgets/widgets.dart';
 
 import 'need_help.dart';
 import 'wanna_help.dart';
@@ -22,28 +21,32 @@ class HelpSelectorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<HandyThemeBloc>(context)
-        .add(HandyThemeUpdateTitleEvent(title: "What do you want to do?"));
-
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: Draggable(
-          onDragEnd: (drag) {
-            if (drag.offset.dx.abs() > 30) {
-              var isDragRight = drag.offset.dx > 0;
-              if (isDragRight) {
-                onSwipeRight();
-              } else {
-                onSwipeLeft();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('What do you want to do?'),
+        leading: Container(),
+      ),
+      body: Container(
+        color: Colors.white,
+        child: Center(
+          child: Draggable(
+            onDragEnd: (drag) {
+              if (drag.offset.dx.abs() > 30) {
+                var isDragRight = drag.offset.dx > 0;
+                if (isDragRight) {
+                  onSwipeRight();
+                } else {
+                  onSwipeLeft();
+                }
               }
-            }
-          },
-          childWhenDragging: Container(),
-          feedback: _buildCard(),
-          child: _buildCard(),
+            },
+            childWhenDragging: Container(),
+            feedback: _buildCard(),
+            child: _buildCard(),
+          ),
         ),
       ),
+      bottomNavigationBar: HelpSelectorNavigationBar(),
     );
   }
 

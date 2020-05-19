@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handyclientapp/handy_theme/handy_theme.dart';
 import 'package:handyclientapp/models/models.dart';
 import 'package:handyclientapp/pages/pages.dart';
 
