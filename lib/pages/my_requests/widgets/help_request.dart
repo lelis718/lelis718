@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:handyclientapp/models/help.dart';
+import 'package:handyclientapp/pages/help_selector/help_list/model/help.dart';
 
 class HelpRequest extends StatelessWidget {
   final Help helpRequest;

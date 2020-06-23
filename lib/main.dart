@@ -1,133 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handyclientapp/bloc/handy_bloc.dart';
-import 'package:handyclientapp/pages/my_requests/my_requests_page.dart';
-import 'package:handyclientapp/pages/need_help/request_sucess_confirmation.dart';
-import 'package:handyclientapp/pages/widgets/loading.dart';
-import 'package:handyclientapp/service_locator.dart';
+import 'package:handyclientapp/pages/pages.dart';
+import 'package:handyclientapp/services/services.dart';
 
-import 'pages/pages.dart';
-import 'services/services.dart';
+import 'handy_theme/handy_theme.dart';
+import 'navigation/navigation.dart';
 
 void main() {
   setupServiceLocator();
-  runApp(
-    HandyClient(
-      handyBloc: HandyBloc(
-        deviceInfoService: locator<DeviceInfoService>(),
-        helpService: locator<HelpService>(),
-        introService: locator<IntroService>(),
-      ),
-    ),
-  );
+  runApp(HandyClient());
 }
 
 class HandyClient extends StatelessWidget {
-  final HandyBloc handyBloc;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
-  HandyClient({this.handyBloc});
+  final initialRoute = Routes.home;
+
+  final routes = {
+    Routes.home: (context) => HomePage(),
+    Routes.intro: (context) => IntroPage(),
+    Routes.helpSelector: (context) => HelpSelectorPage(),
+    Routes.helpList: (context) => HelpListPage(),
+    //Routes.helpDetail: (context) => HelpDetailWidget(),
+    Routes.chat: (context) => ChatPage(),
+    Routes.needHelp: (context) => NeedHelpWidget(),
+    Routes.myHelpRequests: (context) => MyRequestsWidget(),
+  };
+
+  HandyClient();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (BuildContext context) => handyBloc,
-        child: BlocBuilder<HandyBloc, HandyState>(builder: (context, state) {
-          if (state is HandyInitializingState) {
-            return SplashPage(
-              secondsToFinish: state.secondsToFinish,
-              onFinish: () {
-                context.bloc<HandyBloc>().add(HandyInitializedEvent());
-              },
-            );
-          }
-
-          if (state is HandyLoggedOutState) {
-            return IntroPage(
-              cardsInfo: state.cards,
-              onFinishCards: () {
-                context.bloc<HandyBloc>().add(HandyInitializedEvent());
-              },
-            );
-          }
-
-          if (state is HandyLoggedInState) {
-            return HelpSelectorPage(
-              onSwipeLeft: () {
-                context.bloc<HandyBloc>().add(WantToHelpEvent());
-              },
-              onSwipeRight: () {
-                context.bloc<HandyBloc>().add(NeedHelpEvent());
-              },
-              onRequestHelpTap: () {
-                context.bloc<HandyBloc>().add(NeedHelpEvent());
-              },
-              onMyRequestsTap: () {
-                context.bloc<HandyBloc>().add(MyRequestsEvent());
-              },
-              onHelpSomeoneTap: () {
-                context.bloc<HandyBloc>().add(WantToHelpEvent());
-              },
-            );
-          }
-
-          if (state is LoadState) {
-            return Loading();
-          }
-
-          if (state is WantToHelpState) {
-            return HelpListPage(
-              helpRequests: state.helpRequests,
-              onHelp: (help) {
-                context.bloc<HandyBloc>().add(StartChatEvent(help: help));
-              },
-            );
-          }
-
-          if (state is NeedHelpState) {
-            return NeedHelpPage(
-              deviceInfo: state.deviceInfo,
-              onReturning: () {
-                context.bloc<HandyBloc>().add(HandyInitializedEvent());
-              },
-              onSubmit: (helpRequest) {
-                context
-                    .bloc<HandyBloc>()
-                    .add(SendRequestEvent(helpRequest: helpRequest));
-              },
-            );
-          }
-
-          if (state is RequestSentState) {
-            if (state.isSuccess) {
-              return RequestSucessConfirmation(
-                onClose: () {
-                  context.bloc<HandyBloc>().add(HandyInitializedEvent());
-                },
-              );
-            }
-          }
-
-          if (state is StartChatState) {
-            return ChatPage(
-              help: state.help,
-              messages: state.messages,
-              deviceInfo: state.deviceInfo,
-              onReturning: () {
-                context.bloc<HandyBloc>().add(HandyInitializedEvent());
-              },
-              onSendMessage: (message) {
-                context.bloc<HandyBloc>().add(SendChatMessageEvent());
-              },
-            );
-          }
-
-          if (state is MyRequestsState) {
-            return MyRequestsPage(helpRequests: state.helpRequests);
-          }
-
-          return Container();
-        }),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NavigationBloc>(
+          create: (context) => NavigationBloc(),
+        ),
+        BlocProvider<HandyThemeBloc>(
+          create: (context) => HandyThemeBloc(),
+        ),
+        // BlocProvider<HelpListBloc>(
+        //   create: (context) => HelpListBloc(
+        //     deviceInfoService: locator<DeviceInfoService>(),
+        //     helpService: locator<HelpService>(),
+        //   ),
+        // ),
+        // BlocProvider<MyRequestsBloc>(
+        //   create: (context) => MyRequestsBloc(
+        //     deviceInfoService: locator<DeviceInfoService>(),
+        //     helpService: locator<HelpService>(),
+        //   ),
+        // ),
+      ],
+      child: MaterialApp(
+        home: HandyThemeWidget(
+          navigatorKey: navigatorKey,
+          initialRoute: initialRoute,
+          routes: routes,
+        ),
       ),
     );
   }

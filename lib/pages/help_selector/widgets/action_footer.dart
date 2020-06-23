@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:handyclientapp/pages/widgets/action_footer_button.dart';
+import 'package:handyclientapp/pages/shared/shared.dart';
 
 class ActionFooter extends StatelessWidget {
   final VoidCallback onMyRequests;

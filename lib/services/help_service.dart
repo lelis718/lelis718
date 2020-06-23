@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:handyclientapp/models/models.dart';
-import 'package:http/http.dart' as http;
-import 'package:handyclientapp/models/help.dart';
+import 'package:handyclientapp/pages/help_selector/help_list/model/model.dart';
+import 'package:handyclientapp/pages/pages.dart';
 import 'package:http/http.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,19 +20,19 @@ class HelpServiceDefault extends HelpService {
   Future<bool> askHelp(Help help) async {
     final helpJson = help.toJson();
     helpJson['id'] = Uuid().v4();
-    var response = await http.post("$address/app/help", body: helpJson);
+    var response = await post("$address/app/help", body: helpJson);
     return response.statusCode == 200;
   }
 
   @override
   Future<List<Help>> getOtherHelpRequests(String userId) async {
-    final response = await http.get("$address/app/help/others/$userId");
+    final response = await get("$address/app/help/others/$userId");
     return _formatHelpRequest(response);
   }
 
   @override
   Future<List<Help>> getMyHelpRequests(String userId) async {
-    final response = await http.get("$address/app/help/my/$userId");
+    final response = await get("$address/app/help/my/$userId");
     return _formatHelpRequest(response);
   }
 
